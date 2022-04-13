@@ -4,7 +4,7 @@ module HMAC
       @context = context
       @public = public
       @digest = OpenSSL::Digest.new("SHA256")
-      @hmac_key = ENV.fetch("HMAC_SECRET")
+      @hmac_key = HMAC.configuration.secret
     end
 
     def generate(id:)

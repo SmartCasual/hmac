@@ -16,10 +16,8 @@ RSpec.describe HMAC do
 
   let(:secret) { "secret" }
 
-  around do |example|
-    with_env("HMAC_SECRET" => secret) do
-      example.run
-    end
+  before do
+    described_class.configure { |c| c.secret = secret }
   end
 
   describe "uses the env var HMAC_SECRET as the HMAC key" do
