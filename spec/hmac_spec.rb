@@ -3,11 +3,11 @@ require "securerandom"
 
 RSpec.describe HMAC do
   subject(:validation_result) {
-    generator = described_class::Generator.new(context:, public:)
     generated_hmac = generator.generate(id:)
+    generator = described_class::Generator.new(context:, public:, secret: secret_override)
 
-    validator = described_class::Validator.new(context:, public:)
     validator.validate(generated_hmac, against_id: id)
+    validator = described_class::Validator.new(context:, public:, secret: secret_override)
   }
 
   let(:context) { "context" }
@@ -15,13 +15,30 @@ RSpec.describe HMAC do
   let(:public) { false }
 
   let(:secret) { "secret" }
+  let(:secret_override) { nil }
 
   before do
     described_class.configure { |c| c.secret = secret }
   end
 
-  describe "uses the env var HMAC_SECRET as the HMAC key" do
+  describe "if no secret is provided" do
+    let(:secret) { nil }
+    let(:secret_override) { nil }
+
+    it "raises an error" do
+      expect { validation_result }.to raise_error(described_class::ConfigurationError)
+    end
+  end
+
+  describe "uses the configured secret as the HMAC key" do
     let(:secret) { SecureRandom.uuid }
+
+    it { is_expected.to be_truthy }
+  end
+
+  describe "uses the passed in secret in preference to the configured secret" do
+    let(:secret) { nil }
+    let(:secret_override) { SecureRandom.uuid }
 
     it { is_expected.to be_truthy }
   end

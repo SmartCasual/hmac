@@ -1,10 +1,12 @@
 module HMAC
   class Generator
-    def initialize(context:, public: false)
+    def initialize(context:, public: false, secret: nil)
       @context = context
       @public = public
       @digest = OpenSSL::Digest.new("SHA256")
-      @hmac_key = HMAC.configuration.secret
+      @hmac_key = secret || HMAC.configuration.secret
+
+      raise ConfigurationError, "HMAC secret is not configured" if @hmac_key.nil?
     end
 
     def generate(id:)

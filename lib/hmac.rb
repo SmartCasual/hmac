@@ -14,6 +14,7 @@ module HMAC
   end
 
   HMACConfiguration = Struct.new("HMACConfiguration", :secret)
+  class ConfigurationError < StandardError; end
 end
 
 require_relative "hmac/generator"
