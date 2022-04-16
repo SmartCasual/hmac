@@ -9,13 +9,15 @@ module HMAC
       raise ConfigurationError, "HMAC secret is not configured" if @hmac_key.nil?
     end
 
-    def generate(id:)
-      OpenSSL::HMAC
-        .new(hmac_key, digest)
-        .update(id.to_s)
-        .update(context)
-        .tap { |hmac| hmac.update("public") if public? }
-        .hexdigest
+    def generate(id:, extra_fields: {})
+      OpenSSL::HMAC.new(hmac_key, digest).tap do |hmac|
+        hmac.update(id.to_s)
+        hmac.update(context.to_s)
+        hmac.update("public") if public?
+        extra_fields.sort.each do |_, value|
+          hmac.update(value.to_s)
+        end
+      end.hexdigest
     end
 
   private

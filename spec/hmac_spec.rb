@@ -3,16 +3,17 @@ require "securerandom"
 
 RSpec.describe HMAC do
   subject(:validation_result) {
-    generated_hmac = generator.generate(id:)
     generator = described_class::Generator.new(context:, public:, secret: secret_override)
+    generated_hmac = generator.generate(id:, extra_fields:)
 
-    validator.validate(generated_hmac, against_id: id)
     validator = described_class::Validator.new(context:, public:, secret: secret_override)
+    validator.validate(generated_hmac, against_id: id, extra_fields:)
   }
 
   let(:context) { "context" }
   let(:id) { "id" }
   let(:public) { false }
+  let(:extra_fields) { {} }
 
   let(:secret) { "secret" }
   let(:secret_override) { nil }
@@ -65,6 +66,13 @@ RSpec.describe HMAC do
 
   describe "generates a HMAC for a given ID" do
     let(:id) { SecureRandom.uuid }
+
+    it { is_expected.to be_truthy }
+  end
+
+  describe "generates a HMAC for a given ID and extra fields" do
+    let(:id) { SecureRandom.uuid }
+    let(:extra_fields) { { "extra_field" => SecureRandom.uuid } }
 
     it { is_expected.to be_truthy }
   end

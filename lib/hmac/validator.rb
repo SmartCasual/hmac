@@ -1,11 +1,13 @@
+require_relative "generator"
+
 module HMAC
   class Validator
     def initialize(...)
-      @generator = HMAC::Generator.new(...)
+      @generator = Generator.new(...)
     end
 
-    def validate(hmac, against_id:)
-      present?(hmac) && hmac == @generator.generate(id: against_id)
+    def validate(hmac, against_id:, extra_fields: {})
+      present?(hmac) && hmac == @generator.generate(id: against_id, extra_fields:)
     end
 
   private
