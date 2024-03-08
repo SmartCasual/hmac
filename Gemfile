@@ -5,8 +5,8 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in hmac.gemspec
 gemspec
 
-gem "rake", "~> 13.0"
-gem "rspec", "~> 3.11"
-gem "rubocop", "~> 1.7"
+gem "rake", "~> 13.1"
+gem "rspec", "~> 3.13"
+gem "rubocop", "~> 1.62"
 gem "rubocop-rake", "~> 0.6"
-gem "rubocop-rspec", "~> 2.9"
+gem "rubocop-rspec", "~> 2.27"
