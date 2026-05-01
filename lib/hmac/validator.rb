@@ -6,7 +6,7 @@ module HMAC
       @generator = Generator.new(...)
     end
 
-    def validate(hmac, against_id:, extra_fields: {})
+    def validate(hmac, against_id:, extra_fields: {}) # rubocop:disable Naming/PredicateMethod
       present?(hmac) && hmac == @generator.generate(id: against_id, extra_fields:)
     end
 
